@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ItemController;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +22,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::resource('items',ItemController::class);
+Route::post('/checkout',[CheckoutController::class,'checkout'] );
