@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Route;
 Route::resource('items', ItemController::class);
 Route::middleware(['cors'])->group(function () {
     Route::post('/checkout', [CheckoutController::class, 'checkout']);
-
     Route::post('/test', function(Request $request){
         Log::info($request);
         $response = ["message" => "OK"];

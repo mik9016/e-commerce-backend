@@ -17,6 +17,7 @@ class ItemFactory extends Factory
             'price' => $this->faker->numberBetween(10, 500),
             'title' => $this->faker->word,
             'description' => $this->faker->realText(),
+            'imgUrl' => 'https://source.unsplash.com/12V36G17IbQ/400x400'
         ];
     }
 }
