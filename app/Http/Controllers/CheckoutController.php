@@ -21,7 +21,10 @@ class CheckoutController extends Controller
     {
         return array_sum($this->cartPrices);
     }
-
+    //check price in DB after id
+    //add to array
+    //calculate total price
+    //return totalprice to stripe object
     public function checkout(Request $request)
     {
         $cartItems = $request['cartItems'];
@@ -32,16 +35,11 @@ class CheckoutController extends Controller
             $itemDB = $this->findPrice($value['id']);
             $price = $itemDB['price'] * $value['quantity'];
             array_push($this->cartPrices, $price);
-
-            //check price in DB after id
-            //add to array
-            //calculate total price
-            //return totalprice to stripe object
         }
         $totalPrice = $this->calculatePrices();
 
 
-        $stripe = Stripe::make(env('STRIPE_API_KEY'));        
+        $stripe = Stripe::make(env('STRIPE_API_KEY'));
 
         $checkout = $stripe->checkout()->sessions()->create([
             'success_url' => 'http://localhost:3000/checkout/success',
@@ -62,7 +60,7 @@ class CheckoutController extends Controller
                 "card",
                 "klarna",
                 "p24",
-              ],
+            ],
             'mode' => 'payment',
         ]);
 

@@ -79,26 +79,36 @@ class ItemController extends Controller
         //
     }
 
-    /**
+ /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,int $id):JsonResponse
     {
-        //
+        $item = Item::findOrFail($id);
+        $item->update($request->all());
+
+        return response()->json([
+            'message'=>'Success, Item updated!',
+            'data'=>$item
+        ]);
     }
 
-    /**
+        /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int $id
+     * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(int $id):JsonResponse
     {
-        //
+        $item = Item::destroy($id);
+        return response()->json([
+            'message'=>"Success, Item with id: {$id} deleted!",
+            'data'=>$item
+        ]);
     }
 }
