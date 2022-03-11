@@ -2,17 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Cartalyst\Stripe\Stripe;
-use Illuminate\Support\Facades\Log;
+
 
 class CheckoutController extends Controller
 {
-    public function checkout()
+    private $cartPrices = [];
+
+    private function findPrice($id)
     {
+        $item = Item::findOrFail($id);
+        return $item;
+    }
+
+    private function calculatePrices()
+    {
+        return array_sum($this->cartPrices);
+    }
+
+    public function checkout(Request $request)
+    {
+        $cartItems = $request['cartItems'];
+
+
+        foreach ($cartItems as $value) {
+
+            $itemDB = $this->findPrice($value['id']);
+            $price = $itemDB['price'];
+            array_push($this->cartPrices, $price);
+
+            //check price in DB after id
+            //add to array
+            //calculate total price
+            //return totalprice to stripe object
+        }
+        $totalPrice = $this->calculatePrices();
+
+
+        
         $stripe = Stripe::make(env('STRIPE_API_KEY'));        
-        // Log::info($request);
+
         $checkout = $stripe->checkout()->sessions()->create([
             'success_url' => 'http://localhost:3000/checkout/success',
             'cancel_url' => 'http://localhost:3000/checkout/cancel',
@@ -20,7 +51,7 @@ class CheckoutController extends Controller
                 [
                     'price_data' => [
                         'currency' => 'eur',
-                        'unit_amount' => 500,
+                        'unit_amount' => $totalPrice * 100,
                         'product_data' => [
                             'name' => 'Uni Shop Checkout'
                         ]

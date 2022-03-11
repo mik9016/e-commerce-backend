@@ -4,6 +4,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ItemController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,5 +22,13 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::resource('items',ItemController::class);
-Route::post('/checkout',[CheckoutController::class,'checkout'] );
+Route::resource('items', ItemController::class);
+Route::middleware(['cors'])->group(function () {
+    Route::post('/checkout', [CheckoutController::class, 'checkout']);
+
+    Route::post('/test', function(Request $request){
+        Log::info($request);
+        $response = ["message" => "OK"];
+        return $response;
+    });
+});
