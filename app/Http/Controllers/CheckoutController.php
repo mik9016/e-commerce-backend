@@ -30,7 +30,7 @@ class CheckoutController extends Controller
         foreach ($cartItems as $value) {
 
             $itemDB = $this->findPrice($value['id']);
-            $price = $itemDB['price'];
+            $price = $itemDB['price'] * $value['quantity'];
             array_push($this->cartPrices, $price);
 
             //check price in DB after id
@@ -41,7 +41,6 @@ class CheckoutController extends Controller
         $totalPrice = $this->calculatePrices();
 
 
-        
         $stripe = Stripe::make(env('STRIPE_API_KEY'));        
 
         $checkout = $stripe->checkout()->sessions()->create([
