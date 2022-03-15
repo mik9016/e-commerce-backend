@@ -42,8 +42,8 @@ class CheckoutController extends Controller
         $stripe = Stripe::make(env('STRIPE_API_KEY'));
 
         $checkout = $stripe->checkout()->sessions()->create([
-            'success_url' => 'http://localhost:3000/checkout/success',
-            'cancel_url' => 'http://localhost:3000/checkout/cancel',
+            'success_url' => 'https://e-commerce-nuxtjs.herokuapp.com/e-commerce/checkout/success/',
+            'cancel_url' => 'https://e-commerce-nuxtjs.herokuapp.com/e-commerce/checkout/cancel',
             'line_items' => [
                 [
                     'price_data' => [
